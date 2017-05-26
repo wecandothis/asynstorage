@@ -6,6 +6,7 @@ import close from './images/close.png'
 import {foolishIn,foolishOut} from 'react-magic'
 import {StyleSheet,css} from 'aphrodite'
 import elephant from './images/Elephant.png' 
+import wilddog from 'wilddog'
 
 const styles=StyleSheet.create({
      In:{
@@ -19,14 +20,21 @@ const styles=StyleSheet.create({
 
 })
 const hellodata=require('./data.json')
+
+var config = {
+  syncURL: "https://feng-asyn.wilddogio.com" //输入节点 URL
+};
+wilddog.initializeApp(config);
+var ref = wilddog.sync()
 class App extends Component {
+
 constructor(props){
   super(props);
   this.state={
      cards:[
-     {id:'1',text:"## 我的缘分 * 在那遥远的布达拉宫* ",color:"#f5e5a3",fontcolor:'#c9d5a5',top:50,left:150},
-     {id:'2',text:"world ",color:"#f5e5a3",fontcolor:'#c9d5a5',top:150,left:150},
-     {id:'3',text:"HI ",color:"#f5e5a3",fontcolor:'#c9d5a5',top:350,left:150},
+     {id:'1',text:"## 我的缘分 * 在那遥远的布达拉宫* ",color:"#f5eda3",fontcolor:'#c9d5a5',top:50,left:150},
+     {id:'2',text:"world ",color:"#f5e9a3",fontcolor:'#a9d5a5',top:150,left:150},
+     {id:'3',text:"HI ",color:"#f5e5a3",fontcolor:'#c9d5a5',top:350,left:250},
      ],
      animation:true,
      opacitydata:0.6,
@@ -37,16 +45,20 @@ constructor(props){
 }
 //组件渲染完成后,提取本地数据
 componentDidMount(){
-     var data=JSON.parse(localStorage.getItem('stordata'));
-     if(data){
-        this.setState({cards:data})
-     }
+ref.on('value',function(data){
+      var exam=data.val()
+ var exam = Object.keys(exam).map(function(k){return exam[k]});
+ console.log(exam)
+  
+})
+console.log(this.state.cards)
      
 }
 //组件更新后，返回更新后的本地数据
 componentDidUpdate(){
-  var stordata=JSON.stringify(this.state.cards);
-  localStorage.setItem('stordata',stordata)
+
+ref.set(this.state.cards)
+
  
 
 }
